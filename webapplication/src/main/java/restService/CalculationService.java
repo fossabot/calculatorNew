@@ -6,61 +6,59 @@ import calculation.Calculation;
 public class CalculationService {
 	private Calculation calculation = new Calculation();
 	private String storage = "";
-	
-	public String seperate(String request) {
-		String operator = "";
-		
-		boolean isAddition = (request.indexOf("+")>0);
-		if (isAddition) {
-			operator = "+";
-		}
-		
-		boolean isSubtraction = (request.indexOf("-")>0);
-		if (isSubtraction) {
-			operator = "-";
-		}
-		
-		boolean isMultiplication = (request.indexOf("*")>0);
-		if (isMultiplication) {
-			operator = "*";
-		}
+	String operator = "";
 
-		boolean isDivision = (request.indexOf("/")>0);
-		if (isDivision) {
-			operator = "/";
+	public String calculate(String request) {
+		request = objectToString(request, "calculation");
+		boolean negative = false;
+		if (request.substring(0, 1).contentEquals("-")) {
+			negative = true;
+			request = request.substring(1, request.length());
 		}
-		return chooseOperation(request, operator);
+		operator = findOperator(request);
+		return calculation.calculate(request, operator, negative);
+	}
+
+	public String findOperator(String request) {
+		for (int i = 0; i <= request.length(); i++) {
+			if(request.indexOf("+") > 0) {
+				operator = "+";
+				break;
+			}
+			if(request.indexOf("-") > 0) {
+				operator = "-";
+				break;
+			}
+			if(request.indexOf("*") > 0) {
+				operator = "*";
+				break;
+			}
+			if(request.indexOf("/") > 0) {
+				operator = "/";
+				break;
+			}
+		}
+		return operator;
+	}
+
+	public String objectToString(String object, String value) {
+		JSONObject obj =  new JSONObject(object);
+		return obj.getString(value);
 	}
 	
-	public String chooseOperation(String request, String operator) {
-		JSONObject obj =  new JSONObject(request);
-		String term = obj.getString("calculation");
-		String result = "";
-		
-		switch (operator) {
-			case "+":
-			  result = calculation.addition(term);
-			  break;
-			case "-":
-			  result = calculation.subtraction(term);
-			  break;
-			case "*":
-			  result = calculation.multiplication(term);
-			  break;
-			case "/":
-			  result = calculation.division(term);
-			  break;
+	public String store(String storage) {
+		storage = objectToString(storage, "store");
+
+		if(storage.substring(storage.length() - 1).contentEquals(".")) {
+			storage = storage.substring(0, storage.length() - 1);
 		}
-		return result;
-	}
-	
-	public void store(String storage) {
-		this.storage = storage;
+		if(storage.contentEquals("error")) {
+			storage = "";
+		}
+		return this.storage = storage;
 	}
 
 	public String getStorage() {
-		JSONObject obj =  new JSONObject(storage);
-		String store = obj.getString("store");
-		return store;
+		return storage;
 	}
 }
