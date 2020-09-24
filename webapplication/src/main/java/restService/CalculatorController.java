@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CalculatorController {
 	private CalculationService calculationService = new CalculationService();
+	private StorageService storageService = new StorageService();
 
 	@CrossOrigin(origins = "http://localhost:5000")
 	@ResponseStatus(HttpStatus.OK)
-	@PostMapping(value = "/calculate", consumes = "application/json", produces = "application/json")
+	@PostMapping(value = "/calculation", consumes = "application/json", produces = "application/json")
 	public String calculate(@RequestBody String request) {
 		String result = calculationService.calculate(request);
 		return "{\"result\": \""+result+"\"}";
@@ -22,16 +23,16 @@ public class CalculatorController {
 	
 	@CrossOrigin(origins = "http://localhost:5000")
 	@ResponseStatus(HttpStatus.OK)
-	@PostMapping(value = "/store", consumes = "application/json", produces = "application/json")
-	public String store(@RequestBody String request) {
-		String result = calculationService.store(request);
-		return "{\"result\": \""+result+"\"}";
+	@PostMapping(value = "/storage", consumes = "application/json")
+	public boolean store(@RequestBody String request) {
+		boolean worked = storageService.store(request);
+		return worked;
 	}
 	
 	@CrossOrigin(origins = "http://localhost:5000")
 	@ResponseStatus(HttpStatus.OK)
-	@GetMapping(value = "/store", produces = "application/json")
+	@GetMapping(value = "/storage", produces = "application/json")
 	public String getStore() {
-		return "{\"result\": \""+calculationService.getStorage()+"\"}";
+		return "{\"result\": \""+storageService.getStorage()+"\"}";
 	} 
 }
