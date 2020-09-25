@@ -1,6 +1,8 @@
-package restService;
+package applicationRestAPI;
 
 import org.junit.jupiter.api.Test;
+
+import applicationRestAPI.Application;
 
 public class ApplicationTest {
 	
