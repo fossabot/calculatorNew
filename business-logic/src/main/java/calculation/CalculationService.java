@@ -32,6 +32,8 @@ public class CalculationService {
 				throw new Exception("Fehler: Division durch 0 nicht möglich");
 			}
 			break;
+		default:
+			throw new Exception("Eingabe kann nicht berechnet werden.");
 		}
 		String returnResult = outputToString(result);
 		
