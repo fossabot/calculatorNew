@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import calculation.CalculationService;
+import calculation.ParseAndCalculateService;
 import storage.StorageService;
 
 @RestController
 public class CalculatorController {
-	private CalculationService calculationService = new CalculationService();
+	private ParseAndCalculateService parserAndCalculationService = new ParseAndCalculateService();
 	private StorageService storageService = new StorageService();
 
 	@CrossOrigin(origins = "http://localhost:5000")
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(value = "/calculation", consumes = "application/json", produces = "application/json")
-	public String calculate(@RequestBody String request) {
-		String result = calculationService.getResult(request);
+	public String calculate(@RequestBody String request) throws Exception {
+		String result = parserAndCalculationService.parseAndCalculate(request);
 		return "{\"result\": \""+result+"\"}";
 	}
 	

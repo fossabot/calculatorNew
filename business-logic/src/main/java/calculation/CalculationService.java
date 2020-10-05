@@ -1,63 +1,48 @@
 package calculation;
 
-import java.util.StringTokenizer;
+import parser.CalculationObject;
 
 public class CalculationService {
-	RequestParser requestParser = new RequestParser();
 	
-	public String getResult(String request) {
-		String result = requestParser.parse(request);
-		return result;
-	}
-	
-	public String calculate(String request, String operator, boolean isPreSign) {
-		String result ="";
-		StringTokenizer str = new StringTokenizer(request, operator);
-		double one = Double.parseDouble(str.nextToken());
-		double two = Double.parseDouble(str.nextToken());
-		double output = 0.0;
+	public String getResult(CalculationObject calculationObject) throws Exception {
 		
-		if(isPreSign) {
-			one *= -1;
+		double result = 0;
+		double operand1 = Double.parseDouble(calculationObject.getOperand1());
+		double operand2 = Double.parseDouble(calculationObject.getOperand2());
+		String operator = calculationObject.getOperator();
+
+		switch(operator) {
+		case "+":
+			result = operand1 + operand2;
+			break;
+		case "-":
+			result = operand1 - operand2;
+			break;
+		case "*":
+			result = operand1 * operand2;
+			break;
+		case "/":
+			try {
+				result = operand1 / operand2;
+				if(result ==  Double.POSITIVE_INFINITY || result == Double.NEGATIVE_INFINITY) {
+					throw new ArithmeticException();
+				}
+			}
+			catch (ArithmeticException e) {
+				throw new Exception("Fehler: Division durch 0 nicht möglich");
+			}
+			break;
 		}
+		String returnResult = outputToString(result);
 		
-		switch (operator) {
-			case "+":
-				output = one + two;
-				result = outputToString(output);
-				break;
-			case "-":
-				output = one - two;
-				result = outputToString(output);
-				break;
-			case "*":
-				output = one * two;
-				result = outputToString(output);
-				break;
-			case "/":
-				try {
-					output = one / two;
-					if(output == Double.POSITIVE_INFINITY || output == Double.NEGATIVE_INFINITY) {
-						throw new ArithmeticException();
-					}
-					else {
-						result = outputToString(output);
-					}
-				}
-				catch (ArithmeticException e) {
-					System.out.println("Fehler: Division durch 0 nicht möglich");
-					result = "error";
-				}
-				break;
-		}  
-		return result;
+		return returnResult;
 	}
-	
-	public String outputToString(double output) {
-		String string = null;
+		
+	private String outputToString(double output) {
+		String string = "";
 		
 		int value = (int) output;
-
+	
 		if (output != value) {
 			string = Double.toString(output);
 		}
@@ -66,4 +51,5 @@ public class CalculationService {
 		}
 		return string;
 	}
+	
 }
