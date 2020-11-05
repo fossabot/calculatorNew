@@ -27,10 +27,9 @@ public class CalculatorController {
 	@CrossOrigin(origins = "http://localhost:5000")
 	@ResponseStatus(HttpStatus.OK)
 	@PostMapping(value = "/storage", consumes = "application/json", produces = "application/json")
-	public boolean store(@RequestBody String request) {
-		//String result = storageService.store(request);
-		//return "{\"result\": \""+result+"\"}";
-		return true;
+	public String store(@RequestBody String request) throws Exception {
+		String storedValue = storageService.store(request);
+		return "{\"result\": \""+storedValue+"\"}";
 	}
 
 	@CrossOrigin(origins = "http://localhost:5000")

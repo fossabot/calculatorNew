@@ -15,7 +15,6 @@ public class ParseAndCalculateService {
 	private CalculationObject calculationObject = new CalculationObject();
 
 	public String parseAndCalculate(String input) throws Exception {
-		
 		input = objectToString(input, "calculation");
 		input = inputValidation.validateInput(input);
 		input = inputCleanUp.clearInput(input);
@@ -24,12 +23,10 @@ public class ParseAndCalculateService {
 		String result = calculationService.getResult(calculationObject);
 		
 		return result;
-		
 	}
 	
-	private String objectToString(String object, String value) {
+	public String objectToString(String object, String value) {
 		JSONObject obj =  new JSONObject(object);
 		return obj.getString(value);
 	}
-	
 }

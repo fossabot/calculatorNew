@@ -1,39 +1,25 @@
 package storage;
 
+import org.json.JSONObject;
 
 public class StorageService {
+	public String answer;
+	public String storage;
+	
+	public String store(String store) throws Exception {
+		JSONObject obj =  new JSONObject(store);
+		try {
+			this.answer = obj.getString("storage");
+			this.storage = this.answer;
+		}
+		catch (Exception e) {
+			this.storage = "";
+			throw new Exception("Fehler. Eingabe kann nicht gespeichert werden");
+		}
+		return this.answer;
+	}
 
 	public String getStorage() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.storage;
 	}
-
 }
-/*
-private loeschen calculationService = new loeschen();
-public String storage;
-
-public boolean store(String storage) {
-	storage = calculationService.objectToString(storage, "store");
-
-	if(storage.length() == 0 || storage.contentEquals("error")) {
-		this.storage = "";
-	}
-	else {
-		storage = normalize(storage);
-	}
-	return true;
-}
-
-private String normalize(String storage) {
-	if(storage.substring(storage.length() - 1).contentEquals(".")) {
-		storage = storage.substring(0, storage.length() - 1);
-	}
-	this.storage = storage;
-	return storage;
-}
-
-public String getStorage() {
-	return storage;
-}
-}*/

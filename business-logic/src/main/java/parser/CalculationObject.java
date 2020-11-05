@@ -20,7 +20,7 @@ public class CalculationObject {
 
 	public void setOperand1(String operand1) {
 		this.operand1 = operand1;
-	}
+	} 
 
 	public String getOperator() {
 		return operator;

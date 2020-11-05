@@ -61,9 +61,6 @@ public class ParserService {
 						isDot2 = true;
 					}
 				}
-				else {
-					throw new Exception(errorMessage);
-				}
 			}
 		}
 
@@ -102,7 +99,7 @@ public class ParserService {
 			chars.add(operator);
 		}
 		else {
-			throw new Exception("Parser-Error: Zeichen kann nicht identifiziert werden.");
+			throw new Exception("Parser-Error: Zeichen kann nicht identifiziert werden");
 		}
 		return chars;
 	}
@@ -135,7 +132,7 @@ public class ParserService {
 	public boolean checkIfOperand2(String string) throws Exception {
 		boolean operand = false;
 		
-		if (string.equals("number")) {
+		if (string.equals("number")) { 
 			operand = true;
 		}
 		else if (string.equals("dot")) {
@@ -146,5 +143,4 @@ public class ParserService {
 		}
 		return operand;
 	}
-	
 }
