@@ -18,7 +18,7 @@ public class ParserServiceTest {
 	}
 
 	@Test
-	public void testParsingInput_Exception() throws Exception {
+	public void testParsingInputException() throws Exception {
 		Exception e = assertThrows(java.lang.Exception.class, () -> {
 			 parserService.parseInput("2");
 		});
@@ -61,7 +61,7 @@ public class ParserServiceTest {
 	}
 
 	@Test
-	public void testCheckIfOperator_Exception() throws Exception {
+	public void testCheckIfOperatorException() throws Exception {
 		Exception e = assertThrows(java.lang.Exception.class, () -> {
 			parserService.checkIfOperator("number");
 		});

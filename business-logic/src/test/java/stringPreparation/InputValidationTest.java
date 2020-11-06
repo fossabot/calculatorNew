@@ -11,14 +11,14 @@ public class InputValidationTest {
 	@Test
 	public void testInputValidation() throws Exception {
 		String input = "2+3+6*0-900012.2";
-		assertEquals(input, inputValidation.validateInput(input));
+		assertEquals(input, inputValidation.checkInputValidity(input));
 	}
 	
 	@Test
 	public void testInputValidationException() throws Exception {
 		String input = "2+3%6";
 		assertThrows(java.lang.Exception.class, () -> {
-			inputValidation.validateInput(input);
+			inputValidation.checkInputValidity(input);
 		});
 	}
 }

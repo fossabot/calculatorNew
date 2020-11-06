@@ -16,8 +16,8 @@ public class ParseAndCalculateService {
 
 	public String parseAndCalculate(String input) throws Exception {
 		input = objectToString(input, "calculation");
-		input = inputValidation.validateInput(input);
-		input = inputCleanUp.clearInput(input);
+		input = inputValidation.checkInputValidity(input);
+		input = inputCleanUp.deleteBlanks(input);
 		
 		calculationObject = parser.parseInput(input);
 		String result = calculationService.getResult(calculationObject);

@@ -15,7 +15,7 @@ public class StorageServiceTest {
 	}
 	
 	@Test
-	public void testStore_Exception() throws Exception {
+	public void testStoreException() throws Exception {
 		String wrongObject = "{\r\n" + "\"calculation\": \"4/2\"\r\n" + "}";
 		
 		Exception e = assertThrows(java.lang.Exception.class, () -> {

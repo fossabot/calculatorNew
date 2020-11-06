@@ -37,5 +37,13 @@ public class CalculatorController {
 	@GetMapping(value = "/storage", produces = "application/json")
 	public String getStore() {
 		return "{\"result\": \""+storageService.getStorage()+"\"}";
-	} 
+	}
+	
+	void setStorageService(StorageService storageService) {
+		this.storageService = storageService;
+	}
+
+	void setParserAndCalculationService(ParseAndCalculateService parserAndCalculationService) {
+		this.parserAndCalculationService = parserAndCalculationService;
+	}
 }

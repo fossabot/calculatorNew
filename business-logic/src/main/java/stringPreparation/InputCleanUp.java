@@ -2,11 +2,8 @@ package stringPreparation;
 
 public class InputCleanUp {
 	
-	public String clearInput(String input) {
-		
+	public String deleteBlanks(String input) {
 		input = input.replaceAll(" +","");
-		
 		return input;
 	}
-	
 }

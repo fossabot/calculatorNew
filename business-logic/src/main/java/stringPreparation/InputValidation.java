@@ -2,7 +2,7 @@ package stringPreparation;
 
 public class InputValidation {
 	
-	public String validateInput(String input) throws Exception {
+	public String checkInputValidity(String input) throws Exception {
 		
 		String validChars = "0123456789.+-/* ";
 		

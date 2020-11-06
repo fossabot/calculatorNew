@@ -43,7 +43,7 @@ public class CalculationServiceTest {
 	}
 	
 	@Test
-	public void testDivisionbyZero_ThrowsException() throws Exception {
+	public void testDivisionbyZeroThrowsException() throws Exception {
 		assertThrows(java.lang.Exception.class, () -> {
 			calculationService.getResult(new CalculationObject("4", "/", "0"));
 		});

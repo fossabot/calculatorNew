@@ -9,6 +9,6 @@ public class InputCleanUpTest {
 	
 	@Test
 	public void testInputCleanUp() {
-		assertEquals("1+234", inputCleanUp.clearInput(" 1 +     23    4"));	
+		assertEquals("1+234", inputCleanUp.deleteBlanks(" 1 +     23    4"));	
 	}
 }
