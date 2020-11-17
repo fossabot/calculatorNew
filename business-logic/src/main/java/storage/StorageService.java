@@ -8,13 +8,14 @@ public class StorageService {
 	
 	public String store(String store) throws Exception {
 		JSONObject obj =  new JSONObject(store);
+		
 		try {
 			this.answer = obj.getString("storage");
 			this.storage = this.answer;
 		}
 		catch (Exception e) {
 			this.storage = "";
-			throw new Exception("Fehler. Eingabe kann nicht gespeichert werden");
+			throw new StoreException();
 		}
 		return this.answer;
 	}

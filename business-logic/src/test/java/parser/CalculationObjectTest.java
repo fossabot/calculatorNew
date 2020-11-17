@@ -5,21 +5,63 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 public class CalculationObjectTest {
-	CalculationObject firstCalculation = new CalculationObject("2", "+", "1");
-	CalculationObject secondCalculation = new CalculationObject();
+	CalculationObject calculation = new CalculationObject();
+	
+	//TODO 3 Methoden default-Wert
+	//TODO Konstruktor testen
+	//TODO 3 Methoden zum Speichern
 	
 	@Test
-	public void testGetterSetterCalculationObject() {
-		assertEquals("2", firstCalculation.getOperand1());
-		assertEquals("+", firstCalculation.getOperator());
-		assertEquals("1", firstCalculation.getOperand2());
+	public void storeOperand1() {
+		String operand1 = "3";
 		
-		secondCalculation.setOperand1("3");
-		secondCalculation.setOperator("/");
-		secondCalculation.setOperand2("6");
+		calculation.setOperand1(operand1);
 		
-		assertEquals("3", secondCalculation.getOperand1());
-		assertEquals("/", secondCalculation.getOperator());
-		assertEquals("6", secondCalculation.getOperand2());
+		assertEquals(operand1, calculation.getOperand1());
+	}
+	
+	@Test
+	public void operand1Default() {
+		assertEquals(null, calculation.getOperand1());
+	}
+	
+	@Test
+	public void storeOperand2() {
+		String operand2 = "3";
+		
+		calculation.setOperand2(operand2);
+		
+		assertEquals(operand2, calculation.getOperand2());		
+	}
+	
+	@Test
+	public void operand2Default() {
+		assertEquals(null, calculation.getOperand2());		
+	}
+	
+	@Test
+	public void storeOperator() {
+		String operator = "+";
+		
+		calculation.setOperator(operator);
+		
+		assertEquals(operator, calculation.getOperator());		
+	}
+	
+	@Test
+	public void operatorDefault() {
+		assertEquals(null, calculation.getOperator());		
+	}
+	
+	@Test
+	public void constructorWithSetValues() {
+		String operand1 = "4";
+		String operator = "+";
+		String operand2 = "3";
+		
+		CalculationObject c = new CalculationObject(operand1, operator, operand2);
+		assertEquals(operand1, c.getOperand1());
+		assertEquals(operator, c.getOperator());
+		assertEquals(operand2, c.getOperand2());
 	}
 }

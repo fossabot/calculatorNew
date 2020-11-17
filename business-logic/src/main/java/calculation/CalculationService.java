@@ -1,6 +1,7 @@
 package calculation;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 import parser.CalculationObject;
 
@@ -12,7 +13,9 @@ public class CalculationService {
 		BigDecimal operand1 = new BigDecimal(calculationObject.getOperand1());
 		BigDecimal operand2 = new BigDecimal(calculationObject.getOperand2());
 		String operator = calculationObject.getOperator();
-
+		
+		//TODO Enum
+		
 		switch(operator) {
 		case "+":
 			result = addition(operand1, operand2);
@@ -28,11 +31,11 @@ public class CalculationService {
 				result = division(operand1, operand2);
 			}
 			catch (ArithmeticException e) {
-				throw new Exception("Fehler: Division durch 0 nicht möglich");
+				throw new Exception("Fehler: Division durch 0 nicht möglich.");
 			}
 			break;
 		default:
-			throw new Exception("Eingabe kann nicht berechnet werden.");
+			throw new CalculationException();
 		}
 		String returnResult = outputToString(result);
 		
@@ -55,7 +58,7 @@ public class CalculationService {
 	}
 	
 	public BigDecimal division(BigDecimal operand1, BigDecimal operand2) {
-		BigDecimal result = operand1.divide(operand2);
+		BigDecimal result = operand1.divide(operand2, MathContext.DECIMAL32);
 		return result;
 	}
 

@@ -6,6 +6,11 @@ public class ParserService {
 	
 	String errorMessage = "Keine valide Rechenoperation";
 	
+	/* TODO Extract Method
+	 * Method contains too many lines of code
+	 * Method contains too many if-else-branches
+	 */
+	
 	public CalculationObject parseInput(String input) throws Exception {
 	
 		ArrayList<String> chars = new ArrayList<String>();
@@ -64,11 +69,14 @@ public class ParserService {
 			}
 		}
 
-		if(isOperator) {
+		if(isOperator && operand1 != "" && operand2 != "") {
 			calculation = new CalculationObject(operand1, operator, operand2);
 		}
-		else {
+		else if(!isOperator) {
 			throw new Exception("Keine Rechenoperation");
+		}
+		else {
+			throw new Exception(errorMessage);
 		}
 		
 		return calculation;
