@@ -15,6 +15,8 @@ public class InputValidation {
 				}
 			}
 		}
+		//TODO Stacktrace
+		//TODO Frontend must not pass a null value to the backend
 		catch (NullPointerException e) {
 			throw new InvalidCharacterException();
 		}

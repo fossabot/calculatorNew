@@ -20,6 +20,8 @@ public class StorageService {
 		return this.answer;
 	}
 
+	//TODO Default Storage should not be null
+	//TODO If the default storage was changed, change the test case as well
 	public String getStorage() {
 		return this.storage;
 	}

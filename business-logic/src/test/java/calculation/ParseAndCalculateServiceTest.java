@@ -12,6 +12,8 @@ import parser.CalculationObject;
 import parser.ParserService;
 import stringPreparation.InputCleanUp;
 import stringPreparation.InputValidation;
+import stringPreparation.InvalidCharacterException;
+
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -63,15 +65,18 @@ public class ParseAndCalculateServiceTest {
 	
 	@Test
 	public void parseAndCalculateThrowsParserExceptionBecauseOfInvalidInput() throws Exception {
+		String wrongInput = "{\r\n" + "\"calculation\": \"6%3\"\r\n" + "}";
 		String wrongCalculation = "6%3";
 
-		//Mockito.when(inputValidation.checkInputValidity(wrongCalculation)).thenThrow(InvalidCharacterException.class);
+		Mockito.when(inputValidation.checkInputValidity(wrongCalculation)).thenThrow(InvalidCharacterException.class);
 
 		ParserException e = assertThrows(ParserException.class, () -> {
-			parseAndCalculateService.parseAndCalculate(wrongCalculation);
+			parseAndCalculateService.parseAndCalculate(wrongInput);
 		});
 		
 		assertEquals("Fehler beim Parsen der Eingabe.", e.getMessage());
+		
+		verify(inputValidation, times(1)).checkInputValidity(wrongCalculation);
 	}
 	
 	@Test
@@ -88,6 +93,12 @@ public class ParseAndCalculateServiceTest {
 			parseAndCalculateService.parseAndCalculate(wrongInput);
 		});
 		assertEquals("Fehler beim Parsen der Eingabe.", e.getMessage());
+		
+		verify(inputValidation, times(1)).checkInputValidity(wrongCalculation);
+		verify(inputCleanUp, times(1)).deleteBlanks(wrongCalculation);
+		verify(parserService, times(1)).parseInput(wrongCalculation);
+		
+		Mockito.inOrder(inputValidation, inputCleanUp, parserService);
 	}
 	
 	@Test
@@ -104,6 +115,13 @@ public class ParseAndCalculateServiceTest {
 			parseAndCalculateService.parseAndCalculate(input);
 		});
 		assertEquals("Fehler beim Berechnen der Eingabe.", e.getMessage());
+		
+		verify(inputValidation, times(1)).checkInputValidity(calculation);
+		verify(inputCleanUp, times(1)).deleteBlanks(calculation);
+		verify(parserService, times(1)).parseInput(calculation);
+		verify(calculationService, times(1)).getResult(object);
+		
+		Mockito.inOrder(inputValidation, inputCleanUp, parserService, calculationService);
 	}
 	
 	@Test
