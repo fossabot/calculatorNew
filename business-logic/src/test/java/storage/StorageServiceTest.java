@@ -11,7 +11,7 @@ public class StorageServiceTest {
 	
 	@Test
 	public void storeDefault() throws Exception {
-		assertEquals(null, storageService.getStorage());
+		assertEquals("", storageService.getStorage());
 	}
 	
 	@Test

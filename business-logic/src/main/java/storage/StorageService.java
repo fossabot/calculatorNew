@@ -1,21 +1,23 @@
 package storage;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class StorageService {
 	public String answer;
-	public String storage;
+	public String storage = "";
 	
 	public String store(String store) throws Exception {
-		JSONObject obj =  new JSONObject(store);
+		
 		
 		try {
+			JSONObject obj =  new JSONObject(store);
 			this.answer = obj.getString("storage");
 			this.storage = this.answer;
 		}
-		catch (Exception e) {
+		catch(JSONException jsonException) {
 			this.storage = "";
-			throw new StoreException();
+			//TODO HTTP Response
 		}
 		return this.answer;
 	}
