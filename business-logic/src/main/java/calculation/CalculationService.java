@@ -2,19 +2,18 @@ package calculation;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-
+import exceptions.CalculationException;
+import exceptions.DivisionByZeroException;
 import parser.CalculationObject;
 
 public class CalculationService {
 	
-	public String getResult(CalculationObject calculationObject) throws Exception {
+	public String getResult(CalculationObject calculationObject) throws CalculationException, DivisionByZeroException {
 		
 		BigDecimal result = new BigDecimal("0.0");
 		BigDecimal operand1 = new BigDecimal(calculationObject.getOperand1());
 		BigDecimal operand2 = new BigDecimal(calculationObject.getOperand2());
 		String operator = calculationObject.getOperator();
-		
-		//TODO Enum
 		
 		switch(operator) {
 		case "+":
@@ -31,7 +30,7 @@ public class CalculationService {
 				result = division(operand1, operand2);
 			}
 			catch (ArithmeticException e) {
-				throw new Exception("Fehler: Division durch 0 nicht möglich.");
+				throw new DivisionByZeroException();
 			}
 			break;
 		default:

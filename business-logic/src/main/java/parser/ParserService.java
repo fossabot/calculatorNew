@@ -2,153 +2,135 @@ package parser;
 
 import java.util.ArrayList;
 
+import exceptions.CalculationException;
+import exceptions.InvalidCharacterException;
+
 public class ParserService {
 	
-	String errorMessage = "Keine valide Rechenoperation";
+	boolean isOperator = false, isDot1 = false, isDot2 = false;
 	
-	/* TODO Extract Method
-	 * Method contains too many lines of code
-	 * Method contains too many if-else-branches
-	 */
-	
-	public CalculationObject parseInput(String input) throws Exception {
-	
-		ArrayList<String> chars = new ArrayList<String>();
-		
-		String operand1 = "";
-		String operand2 = "";
-		String operator = "";
-		
-		boolean isOperator = false;
-		boolean isDot1 = false;
-		boolean isDot2 = false;
-		
+	public CalculationObject parseInput(String input) throws CalculationException {
+
+		String operand1 = "", operand2 = "", operator = "";
 		CalculationObject calculation = new CalculationObject();
+		ArrayList<String> charsAsCategory = new ArrayList<String>();
 		
 		for (int i = 0; i <= input.length() - 1; i++) {
 			
-			chars = identifyChar(input.charAt(i), chars, i); //Classify value/char in category
-			
-			if (checkIfOperand1(chars) && !isOperator) {
-				
-				if(chars.get(i).equals("preSign")) {
-					operand1 = operand1 + Character.toString(input.charAt(i));
-				}
-				else if (chars.get(i).equals("number")) {
-					operand1 = operand1 + Character.toString(input.charAt(i));
-				}
-				else if (chars.get(i).equals("dot")) {
-					if(isDot1) {
-						throw new Exception("Keine valide Eingabe");
-					}
-					else {
-						operand1 = operand1 + Character.toString(input.charAt(i));
-						isDot1 = true;
-					}
-				}
-				else if (checkIfOperator(chars.get(i))) {
-					isOperator = true;
-					operator =  Character.toString(input.charAt(i));
-				}
+			try {
+				charsAsCategory = identifyChar(input.charAt(i), charsAsCategory, i);
+			}
+			catch(InvalidCharacterException e) {
+				e.printStackTrace();
+				throw new CalculationException();
 			}
 			
-			else if (checkIfOperand2(chars.get(i)) && isOperator) {
-		
-				if (chars.get(i).equals("number")) {
-					operand2 = operand2 + Character.toString(input.charAt(i));
-				}
-				else if (chars.get(i).equals("dot")) {
-					if(isDot2) {
-						throw new Exception("Keine valide Eingabe");
-					}
-					else {
-						operand2 = operand2 + Character.toString(input.charAt(i));
-						isDot2 = true;
-					}
-				}
+			char currentChar = input.charAt(i);
+			
+			if(isOperand1(charsAsCategory.get(i), i)) {
+				operand1 = extendParameter(operand1, currentChar);
+			}
+			
+			else if(isOperator(charsAsCategory.get(i))) {
+				operator =  Character.toString(currentChar);
+			}
+			
+			else if(isOperand2(charsAsCategory.get(i), i)) {
+				operand2 = extendParameter(operand2, currentChar);
 			}
 		}
-
 		if(isOperator && operand1 != "" && operand2 != "") {
 			calculation = new CalculationObject(operand1, operator, operand2);
 		}
-		else if(!isOperator) {
-			throw new Exception("Keine Rechenoperation");
-		}
 		else {
-			throw new Exception(errorMessage);
+			throw new CalculationException();
 		}
-		
 		return calculation;
 	}
-
-	public ArrayList<String> identifyChar(char character, ArrayList<String> chars, int index) throws Exception {
+	
+	public ArrayList<String> identifyChar(char character, ArrayList<String> chars, int index) throws InvalidCharacterException {
 		
-		String number = "number";
-		String operator = "operator";
-		String dot = "dot";
-		String preSign = "preSign";
-
-		String validNumbers = "0123456789";
-		String validOperators = "+-*/";
-
+		final String VALID_NUMBERS = "0123456789";
+		final String VALID_OPERATORS = "+-*/";
 		String c = Character.toString(character);
 		
-		if (validNumbers.contains(c)) {
-			chars.add(number);
+		if (VALID_NUMBERS.contains(c)) {
+			chars.add("number");
 		}
 		else if (c.equals(".")) {
-			chars.add(dot);
+			chars.add("dot");
 		}
 		else if (index == 0 && c.equals("-")) {
-			chars.add(preSign);
+			chars.add("preSign");
 		}
-		else if (validOperators.contains(c)) {
-			chars.add(operator);
+		else if (VALID_OPERATORS.contains(c)) {
+			chars.add("operator");
 		}
 		else {
-			throw new Exception("Parser-Error: Zeichen kann nicht identifiziert werden");
+			throw new InvalidCharacterException();
 		}
 		return chars;
 	}
-
-	public boolean checkIfOperand1(ArrayList<String> chars) throws Exception {
+	
+	public boolean isOperand1(String currentChar, int i) throws CalculationException {
+		boolean isOperand1 = false;
 		
-		String first = chars.get(0);
-		boolean operand = true;
-		
-		if (first.equals("operator") || first.equals("dot")) {
-			operand = false;
-			throw new Exception(errorMessage);
+		if(!isOperator) {
+			if(currentChar.equals("preSign") || currentChar.equals("number")) {
+				isOperand1 = true;
+			}
+			else if(currentChar.equals("dot")) {
+				isOperand1 = checkDotCorrectness(currentChar, i, isDot1);
+				isDot1 = true;
+			}
 		}
-		return operand;
+		return isOperand1;	
 	}
-
-	public boolean checkIfOperator(String string) throws Exception {
+	
+	public boolean isOperand2(String currentChar, int i) throws CalculationException {
+		boolean isOperand2 = false;
 		
-		boolean operator = false;
+		if(isOperator) {
+			if(currentChar.equals("number")) {
+				isOperand2 = true;
+			}
+			else if(currentChar.equals("dot")) {
+				isOperand2 = checkDotCorrectness(currentChar, i, isDot2);
+				isDot2 = true;
+			}
+			else {
+				throw new CalculationException();
+			}
+		}
+		return isOperand2;
+	}
+	
+	public boolean isOperator(String currentChar) {
+		boolean correctOperator = false;
 		
-		if (string.equals("operator")) {
-			operator = true;
+		if(currentChar.equals("operator") && !isOperator) {
+			correctOperator = true;
+			isOperator = true;
+		}
+		return correctOperator;
+	}
+	
+	public String extendParameter(String parameter, char c) {
+		parameter = parameter + c;
+		return parameter;
+	}
+	
+	public boolean checkDotCorrectness(String currentChar, int i, boolean Dot) throws CalculationException {
+		boolean isCorrect = false;
+		
+		if(!Dot) {
+			if(i > 0) {
+				isCorrect = true;
+			}
 		}
 		else {
-			throw new Exception(errorMessage);
+			throw new CalculationException();
 		}
-		return operator;
-	}
-
-	public boolean checkIfOperand2(String string) throws Exception {
-		boolean operand = false;
-		
-		if (string.equals("number")) { 
-			operand = true;
-		}
-		else if (string.equals("dot")) {
-			operand = true;
-		}
-		else {
-			throw new Exception(errorMessage);
-		}
-		return operand;
+		return isCorrect;
 	}
 }

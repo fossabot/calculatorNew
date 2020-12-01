@@ -1,15 +1,11 @@
 package parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
 public class CalculationObjectTest {
-	CalculationObject calculation = new CalculationObject();
 	
-	//TODO 3 Methoden default-Wert
-	//TODO Konstruktor testen
-	//TODO 3 Methoden zum Speichern
+	CalculationObject calculation = new CalculationObject();
 	
 	@Test
 	public void storeOperand1() {

@@ -2,8 +2,8 @@ package storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.Test;
+import exceptions.StorageException;
 
 public class StorageServiceTest {
 
@@ -26,20 +26,21 @@ public class StorageServiceTest {
 	}
 	
 	@Test
-	public void throwsExceptionAfterInvalidInput() {
+	public void throwsStorageExceptionAfterInvalidInput() {
 		String wrongObject = "{\r\n" + "\"calculation\": \"4/2\"\r\n" + "}";
 		
-		StoreException e = assertThrows(StoreException.class, () -> {
+		StorageException e = assertThrows(StorageException.class, () -> {
 			storageService.store(wrongObject);
 		});
-		assertEquals("Fehler. Eingabe kann nicht gespeichert werden.", e.getMessage());
+		
+		assertEquals("The input could not be stored.", e.getMessage());
 	}
 	
 	@Test
-	public void resetToDefaultAfterInvalidInput() throws Exception {
+	public void resetToDefaultAfterInvalidInput() throws StorageException {
 		storageService.store("{\r\n" + "\"storage\": \"8\"\r\n" + "}");
 		
-		assertThrows(StoreException.class, () -> {
+		assertThrows(StorageException.class, () -> {
 			storageService.store("{\r\n" + "\"calculation\": \"4/2\"\r\n" + "}");
 		});
 		

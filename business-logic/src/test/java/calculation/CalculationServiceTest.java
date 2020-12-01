@@ -2,13 +2,11 @@ package calculation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.math.BigDecimal;
-
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-
+import exceptions.CalculationException;
+import exceptions.DivisionByZeroException;
 import parser.CalculationObject;
 
 public class CalculationServiceTest {
@@ -17,8 +15,7 @@ public class CalculationServiceTest {
 	@Nested
 	class Addition {
 		static final String PLUS = "+";
-		@DisplayName("Tests for addition")
-	
+
 		@Test
 		public void additionOfTwoPositiveIntegers() throws Exception {
 			assertEquals("6", calculationService.getResult(new CalculationObject("4", PLUS, "2")));
@@ -43,7 +40,6 @@ public class CalculationServiceTest {
 	@Nested
 	class Subtraction {
 		static final String MINUS = "-";
-		@DisplayName("Tests for subtraction")
 	
 		@Test
 		public void subtractionOfTwoPositiveIntegers() throws Exception {
@@ -69,7 +65,6 @@ public class CalculationServiceTest {
 	@Nested
 	class Multiplication {
 		static final String TIMES = "*";
-		@DisplayName("Tests for multiplication")
 		
 		@Test
 		public void multiplicationOfTwoPositiveIntegers() throws Exception {
@@ -96,7 +91,6 @@ public class CalculationServiceTest {
 	class Division {
 		static final String DIVIDE = "/";
 
-		@DisplayName("Tests for division")
 		@Test
 		public void divisionOfTwoPositiveIntegers() throws Exception {
 			assertEquals("2", calculationService.getResult(new CalculationObject("4", DIVIDE, "2")));
@@ -118,11 +112,11 @@ public class CalculationServiceTest {
 		}
 		
 		@Test
-		public void divisionbyZero() {
-			Exception e = assertThrows(java.lang.Exception.class, () -> {
+		public void divisionbyZeroThrowsDivisionByZeroException() {
+			DivisionByZeroException e = assertThrows(DivisionByZeroException.class, () -> {
 				calculationService.getResult(new CalculationObject("4", "/", "0"));
 			});
-			assertEquals("Fehler: Division durch 0 nicht möglich.", e.getMessage());
+			assertEquals("Error because division by zero.", e.getMessage());
 		}
 	}
 
@@ -131,7 +125,7 @@ public class CalculationServiceTest {
 		CalculationException e = assertThrows(CalculationException.class, () -> {
 			calculationService.getResult(new CalculationObject("4", "%", "2"));
 		});
-		assertEquals("Fehler beim Berechnen der Eingabe.", e.getMessage());
+		assertEquals("Error while calculating the input.", e.getMessage());
 	}
 	
 	@Test

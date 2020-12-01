@@ -30,7 +30,7 @@ public class AssertJCalculationServiceTest {
 			fail("Exception expected because division by zero is not allowed.");
 		}
 		catch(Exception e) {
-			assertThat(e).hasMessage("Fehler: Division durch 0 nicht möglich.");
+			assertThat(e).hasMessage("Error because division by zero.");
 		}
 	}
 }

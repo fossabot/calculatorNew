@@ -2,7 +2,6 @@ package calculation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,32 +9,26 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import parser.CalculationObject;
 import parser.ParserService;
-import stringPreparation.InputCleanUp;
-import stringPreparation.InputValidation;
-import stringPreparation.InvalidCharacterException;
+import stringPreparation.StringPreparation;
 
 import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import exceptions.CalculationException;
+import exceptions.InvalidCharacterException;
 
 @ExtendWith(MockitoExtension.class)
 public class ParseAndCalculateServiceTest {
 	
-	//TODO Testmethode aufteilen
-	//TODO Dependencies wegmocken
-	//TODO ObjectToString-Methode testen
-	
 	private ParseAndCalculateService parseAndCalculateService = new ParseAndCalculateService();
 	
-	@Mock InputValidation inputValidation;
-	@Mock InputCleanUp inputCleanUp;
+	@Mock StringPreparation stringPreparation;
 	@Mock ParserService parserService;
 	@Mock CalculationService calculationService;
 	@Mock CalculationObject object;
 	 
 	@BeforeEach
 	public void setMethods() {
-		parseAndCalculateService.setInputValidation(inputValidation);
-		parseAndCalculateService.setInputCleanUp(inputCleanUp);
+		parseAndCalculateService.setStringPreparation(stringPreparation);
 		parseAndCalculateService.setParserService(parserService);
 		parseAndCalculateService.setCalculationService(calculationService);
 	}
@@ -46,59 +39,53 @@ public class ParseAndCalculateServiceTest {
 		String calculation = "6+3";
 		String expectedResult = "9";
 
-		Mockito.when(inputValidation.checkInputValidity(calculation)).thenReturn(calculation);
-		Mockito.when(inputCleanUp.deleteBlanks(calculation)).thenReturn(calculation);
+		Mockito.when(stringPreparation.checkInputValidity(calculation)).thenReturn(calculation);
 		Mockito.when(parserService.parseInput(calculation)).thenReturn(object);
 		Mockito.when(calculationService.getResult(object)).thenReturn(expectedResult);
 		
 		String result = parseAndCalculateService.parseAndCalculate(input);
 		
-		verify(inputValidation, times(1)).checkInputValidity(calculation);
-		verify(inputCleanUp, times(1)).deleteBlanks(calculation);
+		verify(stringPreparation, times(1)).checkInputValidity(calculation);
 		verify(parserService, times(1)).parseInput(calculation);
 		verify(calculationService, times(1)).getResult(object);
 		
-		Mockito.inOrder(inputValidation, inputCleanUp, parserService, calculationService);
+		Mockito.inOrder(stringPreparation, parserService, calculationService);
 		
 		assertEquals(expectedResult, result);
 	}
 	
 	@Test
-	public void parseAndCalculateThrowsParserExceptionBecauseOfInvalidInput() throws Exception {
+	public void parseAndCalculateThrowsCalculationExceptionBecauseOfInvalidInput() throws Exception {
 		String wrongInput = "{\r\n" + "\"calculation\": \"6%3\"\r\n" + "}";
 		String wrongCalculation = "6%3";
 
-		Mockito.when(inputValidation.checkInputValidity(wrongCalculation)).thenThrow(InvalidCharacterException.class);
+		Mockito.when(stringPreparation.checkInputValidity(wrongCalculation)).thenThrow(InvalidCharacterException.class);
 
-		ParserException e = assertThrows(ParserException.class, () -> {
+		CalculationException e = assertThrows(CalculationException.class, () -> {
 			parseAndCalculateService.parseAndCalculate(wrongInput);
 		});
 		
-		assertEquals("Fehler beim Parsen der Eingabe.", e.getMessage());
+		assertEquals("Error while calculating the input.", e.getMessage());
 		
-		verify(inputValidation, times(1)).checkInputValidity(wrongCalculation);
+		verify(stringPreparation, times(1)).checkInputValidity(wrongCalculation);
 	}
 	
 	@Test
-	public void parseAndCalculateThrowsParserExceptionBecauseOfParserError() throws Exception {
+	public void parseAndCalculateThrowsCalculationExceptionBecauseOfParserError() throws Exception {
 		String wrongInput = "{\r\n" + "\"calculation\": \"6%3\"\r\n" + "}";
 		String wrongCalculation = "6%3";
 		
-		Mockito.when(inputValidation.checkInputValidity(wrongCalculation)).thenReturn(wrongCalculation);
-		Mockito.when(inputCleanUp.deleteBlanks(wrongCalculation)).thenReturn(wrongCalculation);
+		Mockito.when(stringPreparation.checkInputValidity(wrongCalculation)).thenReturn(wrongCalculation);
+		Mockito.when(parserService.parseInput(wrongCalculation)).thenThrow(CalculationException.class);
 
-		Mockito.when(parserService.parseInput(wrongCalculation)).thenThrow(Exception.class);
-
-		ParserException e = assertThrows(ParserException.class, () -> {
+		assertThrows(CalculationException.class, () -> {
 			parseAndCalculateService.parseAndCalculate(wrongInput);
 		});
-		assertEquals("Fehler beim Parsen der Eingabe.", e.getMessage());
 		
-		verify(inputValidation, times(1)).checkInputValidity(wrongCalculation);
-		verify(inputCleanUp, times(1)).deleteBlanks(wrongCalculation);
+		verify(stringPreparation, times(1)).checkInputValidity(wrongCalculation);
 		verify(parserService, times(1)).parseInput(wrongCalculation);
 		
-		Mockito.inOrder(inputValidation, inputCleanUp, parserService);
+		Mockito.inOrder(stringPreparation, parserService);
 	}
 	
 	@Test
@@ -106,27 +93,33 @@ public class ParseAndCalculateServiceTest {
 		String input = "{\r\n" + "\"calculation\": \"6/3\"\r\n" + "}";
 		String calculation = "6/3";
 
-		Mockito.when(inputValidation.checkInputValidity(calculation)).thenReturn(calculation);
-		Mockito.when(inputCleanUp.deleteBlanks(calculation)).thenReturn(calculation);
+		Mockito.when(stringPreparation.checkInputValidity(calculation)).thenReturn(calculation);
 		Mockito.when(parserService.parseInput(calculation)).thenReturn(object);
-		Mockito.when(calculationService.getResult(object)).thenThrow(Exception.class);
-
-		CalculationException e = assertThrows(CalculationException.class, () -> {
+		Mockito.when(calculationService.getResult(object)).thenThrow(CalculationException.class);
+		
+		assertThrows(CalculationException.class, () -> {
 			parseAndCalculateService.parseAndCalculate(input);
 		});
-		assertEquals("Fehler beim Berechnen der Eingabe.", e.getMessage());
 		
-		verify(inputValidation, times(1)).checkInputValidity(calculation);
-		verify(inputCleanUp, times(1)).deleteBlanks(calculation);
+		verify(stringPreparation, times(1)).checkInputValidity(calculation);
 		verify(parserService, times(1)).parseInput(calculation);
 		verify(calculationService, times(1)).getResult(object);
 		
-		Mockito.inOrder(inputValidation, inputCleanUp, parserService, calculationService);
+		Mockito.inOrder(stringPreparation, parserService, calculationService);
 	}
 	
 	@Test
 	public void objectToString() {
 		String value = "8+3";
 		assertEquals(value, parseAndCalculateService.objectToString("{\r\n" + "\"calculation\": \"" + value + "\"\r\n" + "}", "calculation"));
+	}
+	
+	@Test
+	public void parseAndCalculateThrowsCalculationExceptionBecauseOfJSONError() throws Exception {
+		String wrongJSONFormatInput = "{\r\n" + "\"\": \"6/3\"\r\\rn" + "}";
+		
+		assertThrows(CalculationException.class, () -> {
+			parseAndCalculateService.parseAndCalculate(wrongJSONFormatInput);
+		});
 	}
 }

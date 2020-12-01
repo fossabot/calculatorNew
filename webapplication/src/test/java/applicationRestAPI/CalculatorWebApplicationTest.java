@@ -12,5 +12,4 @@ public class CalculatorWebApplicationTest {
 		CalculatorWebApplication app = Mockito.mock(CalculatorWebApplication.class);
 		
 	}
-
 }

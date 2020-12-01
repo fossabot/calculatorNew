@@ -2,28 +2,26 @@ package storage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import exceptions.StorageException;
 
 public class StorageService {
-	public String answer;
+	public String toStore;
 	public String storage = "";
 	
-	public String store(String store) throws Exception {
-		
+	public String store(String inputInJSONFormat) throws StorageException {
 		
 		try {
-			JSONObject obj =  new JSONObject(store);
-			this.answer = obj.getString("storage");
-			this.storage = this.answer;
+			JSONObject obj =  new JSONObject(inputInJSONFormat);
+			this.toStore = obj.getString("storage");
+			this.storage = this.toStore;
 		}
 		catch(JSONException jsonException) {
 			this.storage = "";
-			//TODO HTTP Response
+			throw new StorageException();
 		}
-		return this.answer;
+		return this.toStore;
 	}
 
-	//TODO Default Storage should not be null
-	//TODO If the default storage was changed, change the test case as well
 	public String getStorage() {
 		return this.storage;
 	}
