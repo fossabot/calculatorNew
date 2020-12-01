@@ -2,11 +2,14 @@ package parser;
 
 import java.util.ArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import exceptions.CalculationException;
 import exceptions.InvalidCharacterException;
 
 public class ParserService {
-	
+	private static final Logger LOGGER = LogManager.getLogger();
 	boolean isOperator = false, isDot1 = false, isDot2 = false;
 	
 	public CalculationObject parseInput(String input) throws CalculationException {
@@ -22,6 +25,7 @@ public class ParserService {
 			}
 			catch(InvalidCharacterException e) {
 				e.printStackTrace();
+				LOGGER.error("Cannot identify char.", e);
 				throw new CalculationException();
 			}
 			
@@ -43,6 +47,7 @@ public class ParserService {
 			calculation = new CalculationObject(operand1, operator, operand2);
 		}
 		else {
+			LOGGER.error("Calculation is not valid - Parameter missing.");
 			throw new CalculationException();
 		}
 		return calculation;
@@ -99,6 +104,7 @@ public class ParserService {
 				isDot2 = true;
 			}
 			else {
+				LOGGER.error("Operand2 is not valid.");
 				throw new CalculationException();
 			}
 		}
@@ -129,6 +135,7 @@ public class ParserService {
 			}
 		}
 		else {
+			LOGGER.error("Too many dots.");
 			throw new CalculationException();
 		}
 		return isCorrect;

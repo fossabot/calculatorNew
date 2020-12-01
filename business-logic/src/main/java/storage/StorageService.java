@@ -1,5 +1,7 @@
 package storage;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import exceptions.StorageException;
@@ -7,6 +9,7 @@ import exceptions.StorageException;
 public class StorageService {
 	public String toStore;
 	public String storage = "";
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public String store(String inputInJSONFormat) throws StorageException {
 		
@@ -17,6 +20,8 @@ public class StorageService {
 		}
 		catch(JSONException jsonException) {
 			this.storage = "";
+			jsonException.printStackTrace();
+			LOGGER.error(jsonException);
 			throw new StorageException();
 		}
 		return this.toStore;

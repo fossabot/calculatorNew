@@ -1,14 +1,20 @@
 package stringPreparation;
 
+import org.apache.logging.log4j.*;
+
 import exceptions.InvalidCharacterException;
 
 public class StringPreparation {
+	
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public String checkInputValidity(String input) throws InvalidCharacterException {
 		try {
 			input = deleteBlanks(input);
 		}
 		catch (NullPointerException e) {
+			e.printStackTrace();
+			LOGGER.error("Input is null and can therefore not be calculated.", e);
 			throw new InvalidCharacterException();
 		}
 		
@@ -28,6 +34,7 @@ public class StringPreparation {
 		String c =  Character.toString(input.charAt(i));
 		
 		if (!VALID_CHARS.contains(c)) {
+			LOGGER.error("Character is not valid.");
 			throw new InvalidCharacterException();
 		}
 	}

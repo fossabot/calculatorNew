@@ -1,5 +1,7 @@
 package calculation;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 import exceptions.CalculationException;
@@ -10,6 +12,8 @@ import parser.ParserService;
 import stringPreparation.StringPreparation;
 
 public class ParseAndCalculateService {
+	
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private StringPreparation stringPreparation = new StringPreparation();
 	private ParserService parser = new ParserService();
@@ -28,11 +32,13 @@ public class ParseAndCalculateService {
 			result = calculationService.getResult(calculationObject);
 		}
 		catch(JSONException jsonE) {
-			jsonE.getStackTrace();
+			jsonE.printStackTrace();
+			LOGGER.error(jsonE);
 			throw new CalculationException();
 		}
 		catch(InvalidCharacterException e) {
-			e.getStackTrace();
+			e.printStackTrace();
+			LOGGER.error("Character is not valid.", e);
 			throw new CalculationException();
 		}
 		return result;

@@ -2,11 +2,17 @@ package calculation;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import exceptions.CalculationException;
 import exceptions.DivisionByZeroException;
 import parser.CalculationObject;
 
 public class CalculationService {
+	
+	private static final Logger LOGGER = LogManager.getLogger();
 	
 	public String getResult(CalculationObject calculationObject) throws CalculationException, DivisionByZeroException {
 		
@@ -30,10 +36,13 @@ public class CalculationService {
 				result = division(operand1, operand2);
 			}
 			catch (ArithmeticException e) {
+				e.printStackTrace();
+				LOGGER.error("Division by zero.", e);
 				throw new DivisionByZeroException();
 			}
 			break;
 		default:
+			LOGGER.error("Operator is not valid.");
 			throw new CalculationException();
 		}
 		String returnResult = outputToString(result);
