@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import calculation.ParseAndCalculateService;
 import exceptions.CalculationException;
 import exceptions.DivisionByZeroException;
-import exceptions.InvalidCharacterException;
 import exceptions.StorageException;
 import storage.StorageService;
 
@@ -27,9 +26,6 @@ public class CalculatorController {
 		try {
 			String result = parserAndCalculationService.parseAndCalculate(request);
 			return new ResponseEntity<>("{\"result\": \""+result+"\"}", HttpStatus.OK);
-		}
-		catch(InvalidCharacterException e) {
-			return new ResponseEntity<>("Input is invalid.", HttpStatus.NOT_ACCEPTABLE);
 		}
 		catch(CalculationException e) {
 			return new ResponseEntity<>("Input cannot be calculated.", HttpStatus.NOT_ACCEPTABLE);

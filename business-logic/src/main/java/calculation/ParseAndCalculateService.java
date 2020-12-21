@@ -23,7 +23,7 @@ public class ParseAndCalculateService {
 	/* TODO
 	 * Middle Man: Method only delegates work to other methods
 	 */
-	public String parseAndCalculate(String input) throws CalculationException, InvalidCharacterException, DivisionByZeroException {
+	public String parseAndCalculate(String input) throws CalculationException, DivisionByZeroException {
 		String result;
 		try {
 			input = objectToString(input, "calculation");

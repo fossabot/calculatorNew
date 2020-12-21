@@ -13,7 +13,7 @@ public class StringPreparation {
 			input = deleteBlanks(input);
 		}
 		catch (NullPointerException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			LOGGER.error("Input is null and can therefore not be calculated.", e);
 			throw new InvalidCharacterException();
 		}

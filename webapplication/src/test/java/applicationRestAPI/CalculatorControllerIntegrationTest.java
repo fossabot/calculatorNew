@@ -25,10 +25,10 @@ public class CalculatorControllerIntegrationTest {
 		
 	    assertEquals(message, response.getBody());
 	}
-	/*
+	
 	@Test
 	public void testCalculateEndpointNegativePathInvalidCharacterException() throws Exception {
-		String request = "{\"calculation\": \"null\"}";
+		String request = "{\"calculation\":"+null+"\"\"}";
 		
 		ResponseEntity<?> response = calculatorController.calculate(request);
 		
@@ -36,7 +36,7 @@ public class CalculatorControllerIntegrationTest {
 		
 	    assertEquals(message, response.getBody());
 	}
-	*/
+	
 	@Test
 	public void testCalculateEndpointNegativePathDivisionByZeroException() throws Exception {
 		String request = "{\"calculation\": \"4/0\"}";
