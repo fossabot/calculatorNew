@@ -16,8 +16,7 @@ import storage.StorageService;
 
 @RestController
 public class CalculatorController {
-	//This is a test
-	//another test
+
 	private ParseAndCalculateService parserAndCalculationService = new ParseAndCalculateService();
 	private StorageService storageService = new StorageService();
 
